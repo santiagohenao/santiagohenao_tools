@@ -14,7 +14,7 @@ try:
 except ModuleNotFoundError:
     print("\"matplotlib\" not found. This module requires matplotlib")
 
-from . import core
+from .core import *
 
 
 #######################################################################################################################################
@@ -25,7 +25,7 @@ class MethodError(Exception):
 ########################################################################################################################################
 
 
-def full_lagrange_interpolation(xdata,ydata,points=100):
+def full_lagrange(xdata,ydata,points=100):
     if len(xdata)!=len(ydata):
         raise ValueError("xdata and ydata must be the same size, but have shapes %d and %d"%(len(xdata),len(ydata)))
     else:
@@ -38,7 +38,7 @@ def full_lagrange_interpolation(xdata,ydata,points=100):
         rs=0
         for j in range(0,k):
             rp=1
-            for i in core.exclude(j,k,0,1):
+            for i in exclude(j,k,0,1):
                     rp*=(q-npx[i])/(npx[j]-npx[i])
             rs+=npy[j]*rp
         return rs
@@ -46,15 +46,15 @@ def full_lagrange_interpolation(xdata,ydata,points=100):
         yglobal.append(L(w))
     return (xglobal,yglobal)
 
-def reduced_interpolation(xdata,ydata,points=100,reduction=1,method="random"):
+def reduced(xdata,ydata,points=100,reduction=1,method="random"):
     if len(xdata)!=len(ydata):
         raise ValueError("xdata and ydata must be the same size, but have shapes %d and %d"%(len(xdata),len(ydata)))
     zipped=list(zip(xdata,ydata))
-    zippedred=core.reduce_list(zipped,reduction,method)
+    zippedred=reduce_list(zipped,reduction,method)
     k_=len(zippedred)
     xunzip=np.zeros(k_)
     yunzip=np.zeros(k_)
     for i in range(k_):
         xunzip[i]+=zippedred[i][0]
         yunzip[i]+=zippedred[i][1]
-    return full_lagrange_interpolation(xunzip,yunzip,points)
+    return full_lagrange(xunzip,yunzip,points)
