@@ -19,14 +19,14 @@ except ModuleNotFoundError:
 #######################################################################################################################################
 
 
-def lower_limit(f,x,ϵ=10**(-6),verbose=False):
+def lower(f,x,ϵ=10**(-6),verbose=False):
     for i in [10,9,8,7,6,5]:
         if abs(f(x-ϵ)-f(x-ϵ/i**2))<10**(-i):
             if verbose==True:
                 print("Uncertainly = ",10**(-i))
             return round(f(x-ϵ/i**2),i)
     return float("nan")
-def upper_limit(f,x,ϵ=10**(-6),verbose=False):
+def upper(f,x,ϵ=10**(-6),verbose=False):
     for i in [10,9,8,7,6,5]:
         if abs(f(x+ϵ)-f(x+ϵ/i**2))<10**(-i):
             if verbose==True:
@@ -52,9 +52,12 @@ def limit(f,x,ϵ=10**(-6)):
 
     if status=='yep':
         return f(x)
-    elif abs(lower_limit(f,x)-upper_limit(f,x))<0.01:
+    elif abs(lower(f,x)-upper(f,x))<0.01:
         #print(abs(lower_limit(f,x)-upper_limit(f,x)))
-        return np.mean([lower_limit(f,x),upper_limit(f,x)])
+        return np.mean([lower(f,x),upper(f,x)])
     else:
         print("The limit does not exists or cannot be determined.")
         return float("nan")
+
+
+#def data_limit(x,y,p=100)

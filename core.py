@@ -23,6 +23,8 @@ class MethodError(Exception):
 #######################################################################################################################################
 
 
+
+
 def make_periodic(f,T,a=0,b=0):
     def p(x):
         return f((x-a)-T*np.floor((x-a)/T)+b)
@@ -61,14 +63,15 @@ def boole(condition):
 def exclude(ex,n,strt=0,stp=1):
 	return [q for q in range(strt,n,stp) if q!=ex]
 
-def ffd(func,x0,h=10**(-6)):
-    d1=(func(x0+h)-func(x0))/h
-    d2=(func(x0)-func(x0-h))/h
-    return np.mean([d1,d2])
 
 def generate_temperated(func,start,end,δ=0.03,σ=0.05,density=1):
+    from .D import ffd
     adap=[start]
     while adap[-1]<=end:
         ap=min([1/(density*np.mean([abs(ffd(func,q))**2 for q in np.linspace(-σ+adap[-1],σ+adap[-1],100)])),δ])
         adap.append(adap[-1]+ap)
     return adap
+
+def shapes_comparation(x,y):
+    if np.shape(x)[0] != np.shape(y)[0]:
+        raise ValueError("x and y must have same length, but have  {} and {}".format(np.shape(x)[0],np.shape(y)[0]))
