@@ -32,7 +32,7 @@ def ffd2(func,x0,h=10**(-6)):
 
 def array_diff(x,y):
     shapes_comparation(x,y)
-    return np.concatenate((np.array(y[1:])-np.array(y[:-1]))/(np.array(x[1:])-np.array(x[:-1])),np.array((y[-1]-y[-2])/(x[-1]-x[-2])))
+    return np.concatenate((np.array(y[1:])-np.array(y[:-1]))/(np.array(x[1:])-np.array(x[:-1])),np.array([(y[-1]-y[-2])/(x[-1]-x[-2])]))
 
 def DataDiff(x,y):
     shapes_comparation(x,y)

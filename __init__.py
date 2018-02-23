@@ -1,7 +1,9 @@
-from .core import *
+#!/usr/bin/python3
 
-from . import interpolation
-from .limits import limit
-from . import limits
-from . import NIntegration
+from .Core import *
+
+from . import Interpolation
+from .Limits import limit
+from . import Limits
+from . import Integration
 from . import D
