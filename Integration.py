@@ -15,11 +15,11 @@ except ModuleNotFoundError:
     print("\"matplotlib\" not found. This module requires matplotlib")
 
 from time import time
-from . import interpolation
-from .core import *
-from .limits import limit
+from . import Interpolation
+from .Core import *
+from .Limits import limit
 
-from .core import MethodError
+from .Core import MethodError
 
 #######################################################################################################################################
 #######################################################################################################################################
@@ -30,6 +30,9 @@ class Methods:
         pass
 
     def Riemann(x,y,upper=False):
+        '''
+        Riemann sums calculator over the points (x,y)
+        '''
         shapes_comparation(x,y)
         s=0
         if upper:
@@ -41,6 +44,9 @@ class Methods:
         return s
 
     def Trapezoid(x,y):
+        '''
+        Trapezoid-rule sums over (x,y)
+        '''
         shapes_comparation(x,y)
         s=0
         for i in range(len(x)-1):
@@ -49,6 +55,8 @@ class Methods:
 
     def Interpolate_Data(x,y,n=3,p=50):
         '''
+        Interpolate the data before the integration.
+        It is not useful to do it with functions, but is sort of eqivalent to Newton-Cotes formulas, but slower.
         It is not a good idea use a large n. Usually 2 < n < 7
         '''
         shapes_comparation(x,y)
@@ -70,6 +78,9 @@ class Methods:
         return (xglobal,yglobal)
 
     def Simpson(x,y):
+        '''
+        Simpson rule. Newton-Cotes formula for parabolas.
+        '''
         shapes_comparation(x,y)
         if np.std(np.array(x[1:])-np.array(x[:-1]))>10**(-7):
             raise ValueError("The Data must be evenly spaced.")
@@ -79,7 +90,7 @@ class Methods:
                 if i%2==0:
                     s+=(x[i+2]-x[i])/6 * (y[i]+4*y[i+1]+y[i+2])
         else:
-            for i in range(len(x)-1):
+            for i in range(len(x)-2):
                 if i%2==0:
                     s+=(x[i+2]-x[i])/6 * (y[i]+4*y[i+1]+y[i+2])
             s+=(y[-1]+y[-2])*(x[-2]-x[-2])/2
@@ -88,6 +99,9 @@ class Methods:
 #######################################################################################################################################
 
 def DataIntegrate(x,y,method="Simpson",interpolation=1,points_for_interpolation=10):
+    '''
+    Main function to integrate data.
+    '''
     methods=["RiemannUpper","RiemannLower","Trapezoid","Simpson"]
     xx=x;yy=y
     if not (method in methods):
@@ -107,10 +121,10 @@ def DataIntegrate(x,y,method="Simpson",interpolation=1,points_for_interpolation=
         # Simpson
         return Methods.Simpson(xx,yy)
 
-
-
-
-def NIntegrate(f,a,b,n=300,method="Simpson",temperated=False):
+def NIntegrate(f,a,b,n=300,method="Simpson",temperated=False,round_to=10):
+    '''
+    Main function to integrate functions with real limits.
+    '''
     methods=["RiemannUpper","RiemannLower","Trapezoid","Simpson","MonteCarlo"]
     if not (method in methods):
         raise MethodError("This method is not aviable. Methods aviable are: %s" % methods)
@@ -121,8 +135,8 @@ def NIntegrate(f,a,b,n=300,method="Simpson",temperated=False):
         # MonteCarlo
         in_d=0
         out_d=0
-        h=max(vf(linspace(a,b,300)))
-        d=min(vf(linspace(a,b,300)))
+        h=max(vf(np.linspace(a,b,300)))
+        d=min(vf(np.linspace(a,b,300)))
         p=0
         for i in range(n):
         	p=[np.random.uniform(a,b),np.random.uniform(d,h)]
@@ -130,27 +144,30 @@ def NIntegrate(f,a,b,n=300,method="Simpson",temperated=False):
         		in_d+=1
         	else:
         		out_d+=1
-        return (in_d/(out_d+in_d))*(abs(h-d))*(b-a)
-    xspace=np.linspace(a,b,n)
+        return round((in_d/(out_d+in_d))*(abs(h-d))*(b-a),round_to)
+    xspace=np.linspace(a,b,n,dtype=np.float128)
     if temperated:
         image=generate_temperated(f,a,b)
     else:
         image=vf(xspace)
     if method==methods[0]:
         # RiemannUpper
-        return Methods.Riemann(xspace,image,upper=True)
+        return round(Methods.Riemann(xspace,image,upper=True),round_to)
     elif method==methods[1]:
         # RiemannUpper
-        return Methods.Riemann(xspace,image,upper=False)
+        return round(Methods.Riemann(xspace,image,upper=False),round_to)
     elif method==methods[2]:
         # Trapezoid
-        return Methods.Trapezoid(xspace,image)
+        return round(Methods.Trapezoid(xspace,image),round_to)
     elif method==methods[3]:
         # Simpson
-        return Methods.Simpson(xspace,image)
+        return round(Methods.Simpson(xspace,image),round_to)
 
-
-
-
-
-#def InfinityIntegrate(f,a,positive=True,method="Trapezoid"):
+def InfinityIntegrate(f,a,positive=True,method="Trapezoid",resolution=5):
+    '''
+    An attempt to integrate functions from a to infinity.
+    '''
+    g=np.vectorize(lambda t: f(1/t)/(t**2))
+    if a==1:
+        xspace=real_interval(omega=resolution,end=a)
+        return DataIntegrate(xspace,g(xspace),method)

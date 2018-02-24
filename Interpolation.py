@@ -14,7 +14,7 @@ try:
 except ModuleNotFoundError:
     print("\"matplotlib\" not found. This module requires matplotlib")
 
-from .core import *
+from .Core import *
 
 
 #######################################################################################################################################
@@ -26,6 +26,12 @@ class MethodError(Exception):
 
 
 def full_lagrange(xdata,ydata,points=100):
+    '''
+    Returns two arrays, x and y=f(x), where f is the Lagrange Polynomial Interpolation for the collection of points (xdata, ydata). 
+    Naturally, the x and y arrays have resolution of points given by the points argument.
+    It is not recommended to interpolate a lot of points on xdata and ydata;
+    the optimal value of points is maybe 15 of 20 (x,y) pairs, maybe more.
+    '''
     if len(xdata)!=len(ydata):
         raise ValueError("xdata and ydata must be the same size, but have shapes %d and %d"%(len(xdata),len(ydata)))
     else:
