@@ -18,7 +18,6 @@ from time import time
 from . import Interpolation
 from .Core import *
 from .Limits import limit
-
 from .Core import MethodError
 
 #######################################################################################################################################
@@ -53,29 +52,7 @@ class Methods:
             s+=(y[i+1]+y[i])*(x[i+1]-x[i])/2
         return s
 
-    def Interpolate_Data(x,y,n=3,p=50):
-        '''
-        Interpolate the data before the integration.
-        It is not useful to do it with functions, but is sort of eqivalent to Newton-Cotes formulas, but slower.
-        It is not a good idea use a large n. Usually 2 < n < 7
-        '''
-        shapes_comparation(x,y)
-        res=len(x)%n
-        xglobal=[]
-        yglobal=[]
-        mod=0
-        if res>0:
-            mod+=2*res
-        for i in range(len(x)-res):
-            if i%(n-1)==0:
-                a=interpolation.full_lagrange(x[i:i+n],y[i:i+n],p-mod)
-                xglobal+=list(a[0])
-                yglobal+=list(a[1])
-        if res>0:
-            a=interpolation.full_lagrange(x[len(x)-res:len(x)],y[len(x)-res:len(x)],mod)
-            xglobal+=list(a[0])
-            yglobal+=list(a[1])
-        return (xglobal,yglobal)
+
 
     def Simpson(x,y):
         '''
@@ -107,7 +84,7 @@ def DataIntegrate(x,y,method="Simpson",interpolation=1,points_for_interpolation=
     if not (method in methods):
         raise MethodError("This method is not aviable. Methods aviable are: %s" % methods)
     if interpolation>1:
-        xx,yy=Methods.Interpolate_Data(x,y,interpolation,points_for_interpolation)
+        xx,yy=Interpolation.Interpolate_Data(x,y,interpolation,points_for_interpolation)
     if method==methods[0]:
         # RiemannUpper
         return Methods.Riemann(xx,yy,upper=True)
@@ -163,11 +140,16 @@ def NIntegrate(f,a,b,n=300,method="Simpson",temperated=False,round_to=10):
         # Simpson
         return round(Methods.Simpson(xspace,image),round_to)
 
-def InfinityIntegrate(f,a,positive=True,method="Trapezoid",resolution=5):
+def InfinityIntegrate(f,a,positive=True,method="Trapezoid",resolution=3.5):
     '''
     An attempt to integrate functions from a to infinity.
     '''
     g=np.vectorize(lambda t: f(1/t)/(t**2))
-    if a==1:
-        xspace=real_interval(omega=resolution,end=a)
-        return DataIntegrate(xspace,g(xspace),method)
+    h=np.vectorize(lambda t: f(-1/t)/(t**2))
+    if positive:
+        if a>=1:
+            xspace=real_interval(omega=resolution,end=a)
+            return DataIntegrate(xspace,g(xspace),method)
+        elif a<1:
+            xspace=real_interval(omega=resolution,end=1)
+            return NIntegrate(f,a,1,1000000,method)+DataIntegrate(xspace,g(xspace),method)

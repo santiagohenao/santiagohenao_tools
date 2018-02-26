@@ -52,7 +52,3 @@ def DataDiff(x,y):
     for i in range(0,len(x)-1):
         d.append((y[i+1]-y[i])/(x[i+1]-x[i]))
     return d
-
-#def limit_diff
-
-#def diff

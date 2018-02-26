@@ -27,7 +27,7 @@ class MethodError(Exception):
 
 def full_lagrange(xdata,ydata,points=100):
     '''
-    Returns two arrays, x and y=f(x), where f is the Lagrange Polynomial Interpolation for the collection of points (xdata, ydata). 
+    Returns two arrays, x and y=f(x), where f is the Lagrange Polynomial Interpolation for the collection of points (xdata, ydata).
     Naturally, the x and y arrays have resolution of points given by the points argument.
     It is not recommended to interpolate a lot of points on xdata and ydata;
     the optimal value of points is maybe 15 of 20 (x,y) pairs, maybe more.
@@ -64,3 +64,29 @@ def reduced(xdata,ydata,points=100,reduction=1,method="random"):
         xunzip[i]+=zippedred[i][0]
         yunzip[i]+=zippedred[i][1]
     return full_lagrange(xunzip,yunzip,points)
+
+
+
+def Interpolate_Data(x,y,n=3,p=50):
+    '''
+    Interpolate the data.
+    It is not useful to do it with functions, but is sort of eqivalent to Newton-Cotes formulas, but slower.
+    It is not a good idea use a large n. Usually 2 < n < 7
+    '''
+    shapes_comparation(x,y)
+    res=len(x)%n
+    xglobal=[]
+    yglobal=[]
+    mod=0
+    if res>0:
+        mod+=2*res
+    for i in range(len(x)-res):
+        if i%(n-1)==0:
+            a=full_lagrange(x[i:i+n],y[i:i+n],p-mod)
+            xglobal+=list(a[0])
+            yglobal+=list(a[1])
+    if res>0:
+        a=full_lagrange(x[len(x)-res:len(x)],y[len(x)-res:len(x)],mod)
+        xglobal+=list(a[0])
+        yglobal+=list(a[1])
+    return (xglobal,yglobal)
