@@ -142,7 +142,7 @@ def NIntegrate(f,a,b,n=300,method="Simpson",temperated=False,round_to=10):
 
 def InfinityIntegrate(f,a,positive=True,method="Trapezoid",resolution=3.5):
     '''
-    An attempt to integrate functions from a to infinity.
+    An attempt to integrate functions from a to infinity. Seems to work very well.
     '''
     g=np.vectorize(lambda t: f(1/t)/(t**2))
     h=np.vectorize(lambda t: f(-1/t)/(t**2))

@@ -53,6 +53,9 @@ def full_lagrange(xdata,ydata,points=100):
     return (xglobal,yglobal)
 
 def reduced(xdata,ydata,points=100,reduction=1,method="random"):
+    '''
+    Reduce data before interpolation.
+    '''
     if len(xdata)!=len(ydata):
         raise ValueError("xdata and ydata must be the same size, but have shapes %d and %d"%(len(xdata),len(ydata)))
     zipped=list(zip(xdata,ydata))

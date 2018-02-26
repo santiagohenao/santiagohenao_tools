@@ -103,6 +103,11 @@ def shapes_comparation(x,y):
         raise ValueError("x and y must have same length, but have  {} and {}".format(np.shape(x)[0],np.shape(y)[0]))
 
 def real_interval(omega=4,end=1):
+    '''
+    Generates a psudo-temperated "real" interval from 0 to end, having more points on the zero surroundings.
+    Begins on the numpy float128 machine epsilon, and then cummulatively sums up.
+    I do not know why this works, or if it would work better on other way, but this works.
+    '''
     if omega<3:
         print("\033[91m DANGER: \033[0m a factor less than 3 will result in memory error.")
         print("It is \033[01m NOT \033[0m recommended to put 3 or less as factor here.")

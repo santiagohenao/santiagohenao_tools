@@ -7,36 +7,34 @@ These files does not contain any code maded by third parties.
 
 Santiago Henao Castellanos, Universidad de los Andes.
 
-Go to examples fo better undestanding. I'm bad explaining.
+Go to examples fo better undestanding (soon). I'm bad explaining.
 
 ## core.py
 
-Some common useful methods:
+Some common useful methods. Array manipulation/customization.
 
-* ```make_periodic(f,T,a=0,b=0):```: This make a "saw" function with the function ```f``` and a period ```T```; makes the function repeats itself on intervals from ```b``` to ```b+TT```, with displacement ```a```. 
+## D.py
 
-* ```reduce_list```: Delete elements froma a list. It is a good idea reduce pairs of lists with ```zip(l1,l2)```. If method is "random", each element will have a probability of 0.5 to be deleted. If as method you put an integer $n$, you will delete $n-1$ of each $n$ element.
+Differentiation tools. Interpolation not included.
 
-* ```boole(condition):``` I miss Mathematica's Boole. Returns 0 if ```condition``` is false, 1 otherwise. It is great for exclude terms from a sum.
+## Integration.py
 
-* ```exclude(ex,n,strt=0,stp=1):``` Gives an Integer iterator $[strt,ex)\cup(ex,n)$, with ```stp``` as steps.
+Numerical Integration tools. For now, methods aviable are Riemann, Trapezoid, and Simpson Rule for data and functions.
 
-* ```ffd(func,x0,h=10**(-6)):``` Fast Function derivative.
+MonteCarlo simple method is only aviable for functions on NIntegrate. DataIntegrate can interpolate the data before integration.
 
-* ```generate_temperated(func,start,end,δ=0.03,σ=0.05,density=4):``` Generates an x-array of pseudo adaptative distributed points from ```start``` to ```end```. Where the derivative of the function ```func``` is too high on the surroindings of a point, then let's put nore points there. It is quite slow and not precise.
+InfinityIntegrate seems to work... The optimal value for the resoluton seems to be "3.5", but resolution values lower than 3 dump my machine.
 
+## Interpolation.py
 
-## diff.py
+Lagrange polynomial interpolation methods. Includes data reduction and partial interpolation for large Data, wich can be like Newton-Cotes formulas for unevelny spaced data.
 
-## NIntegrate.py
+## NewtonRhapson.py
 
-## DataIntegrate.py
+Prospect of NewtonRhapson method.
 
-## interpolation.py
+## StringLength.py
 
-* ```full_lagrange_interpolation(xdata,ydata,points=100):``` Returns two arrays, x and y=f(x), where f is the Lagrange Polynomial Interpolation for the collection of points xdata, ydata. Naturally, the x and y arrays have resolution of points given by the points argument. It is not recommended to interpolate a lot of points on xdata and ydata; the optimal value of points is maybe 15 of 20 (x,y) pairs, maybe more.
+Years ago I programmed an algorithm for finding the period of variable stars on Julia, and it works very well. FFT can easily find the period for evelny spaced data, but astronomical observations are all but evelny spaced on time.
 
-* ```reduced_interpolation(xdata,ydata,points=100,reduction=1,method="random"):``` If you have a big amount of data, you will maybe want to reduce it before interpolating.
-
-## stringlength.py
-
+The method is based on a kind of minimum-phase-entropy principle. It is described on [this paper](http://paperity.org/p/39394557/a-period-finding-method-for-sparse-randomly-spaced-observations-or-how-long-is-a-piece-of)
