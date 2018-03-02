@@ -40,8 +40,11 @@ def array_diff(x,y):
     '''
     An attempt to differentiate arrays without loops.
     '''
+    x=np.array(x);y=np.array(y)
     shapes_comparation(x,y)
-    return np.concatenate((np.array(y[1:])-np.array(y[:-1]))/(np.array(x[1:])-np.array(x[:-1])),np.array([(y[-1]-y[-2])/(x[-1]-x[-2])]))
+    a=(np.array(y[1:])-np.array(y[:-1]))/(np.array(x[1:])-np.array(x[:-1]))
+    b=np.array([(y[-1]-y[-2])/(x[-1]-x[-2])])
+    return list(a)+list(b)
 
 def DataDiff(x,y):
     '''

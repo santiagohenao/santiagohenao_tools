@@ -80,16 +80,13 @@ def Interpolate_Data(x,y,n=3,p=50):
     res=len(x)%n
     xglobal=[]
     yglobal=[]
-    mod=0
-    if res>0:
-        mod+=2*res
     for i in range(len(x)-res):
         if i%(n-1)==0:
-            a=full_lagrange(x[i:i+n],y[i:i+n],p-mod)
+            a=full_lagrange(x[i:i+n],y[i:i+n],p)
             xglobal+=list(a[0])
             yglobal+=list(a[1])
-    if res>0:
-        a=full_lagrange(x[len(x)-res:len(x)],y[len(x)-res:len(x)],mod)
+    if res>1:
+        a=full_lagrange(x[len(x)-res+1:len(x)],y[len(x)-res+1:len(x)],100)
         xglobal+=list(a[0])
         yglobal+=list(a[1])
     return (xglobal,yglobal)
