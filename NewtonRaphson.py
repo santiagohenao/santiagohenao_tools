@@ -27,15 +27,14 @@ def NR(f,t,h=10**(-9)):
     '''
     Single Newton-Rhapson iteration.
     '''
-    return t-f(t)/ffd(f,t,h)
+    return t-(f(t)/ffd(f,t,h))
 
-def NewtonRapshon(f,seed=0,it=4,h=10**(-9),lim=10**(-8)):
-    if abs(f(seed))<lim:
-        return seed
-    else:
-        r=seed
+def NewtonRaphson(f,seed=0,it=4,h=10**(-9)):
+    r=seed
+    for i in range(it):
+        r=NR(f,r,h)
+    while r==r+1 or r!=r:
+        r=seed+np.random.uniform(-1,1,1)[0]
         for i in range(it):
             r=NR(f,r,h)
-            if abs(f(r))<lim:
-                return r
-        return r
+    return r
