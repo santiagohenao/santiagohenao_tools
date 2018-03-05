@@ -8,3 +8,4 @@ from . import Limits
 from . import Integration
 from . import D
 from . import Fourier
+from . import NewtonRaphson

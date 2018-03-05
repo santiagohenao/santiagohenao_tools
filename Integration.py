@@ -140,16 +140,26 @@ def NIntegrate(f,a,b,n=300,method="Simpson",temperated=False,round_to=10):
         # Simpson
         return round(Methods.Simpson(xspace,image),round_to)
 
-def InfinityIntegrate(f,a,positive=True,method="Trapezoid",resolution=3.5):
+def InfinityIntegrate(f,a,positive=True,method="Trapezoid",resolution=3.5,points1=10**6,method1="Simpson"):
     '''
-    An attempt to integrate functions from a to infinity. Seems to work very well.
+    An attempt to integrate functions from a to infinity. Seems to work very well but very slow.
     '''
     g=np.vectorize(lambda t: f(1/t)/(t**2))
     h=np.vectorize(lambda t: f(-1/t)/(t**2))
     if positive:
         if a>=1:
-            xspace=real_interval(omega=resolution,end=a)
+            xspace=real_interval(omega=resolution,end=1/a)
             return DataIntegrate(xspace,g(xspace),method)
         elif a<1:
             xspace=real_interval(omega=resolution,end=1)
-            return NIntegrate(f,a,1,1000000,method)+DataIntegrate(xspace,g(xspace),method)
+            return NIntegrate(f,a,1,points1,method1)+DataIntegrate(xspace,g(xspace),method)
+
+
+def InfinityIntegrate2(f,a,positive=True,method="Trapezoid",points=10**3,points1=10**5,method1="Trapezoid"):
+    g=np.vectorize(lambda t: f(1/t)/(t**2))
+    if a>=1:
+        xspace=np.linspace(np.finfo(np.longfloat).eps,1/a,points,dtype=np.float128)
+        return DataIntegrate(xspace,g(xspace),method)
+    elif a<1:
+        xspace=np.linspace(np.finfo(np.longfloat).eps,1,points,dtype=np.float128)
+        return NIntegrate(f,a,1,points1,method1)+DataIntegrate(xspace,g(xspace),method)

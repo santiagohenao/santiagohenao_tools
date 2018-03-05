@@ -17,6 +17,10 @@ Some common useful methods. Array manipulation/customization.
 
 Differentiation tools. Interpolation not included.
 
+## Fourier.py
+
+Minimal implementation of Discrete Fourier Transform, working for unevenly spaced data.
+
 ## Integration.py
 
 Numerical Integration tools. For now, methods aviable are Riemann, Trapezoid, and Simpson Rule for data and functions.
@@ -31,7 +35,7 @@ Lagrange polynomial interpolation methods. Includes data reduction and partial i
 
 ## NewtonRhapson.py
 
-Prospect of NewtonRhapson method.
+A quite simple NewtonRhapson method.
 
 ## StringLength.py
 

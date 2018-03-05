@@ -123,4 +123,4 @@ def real_interval(omega=4,end=1):
     while a[-1]<end:
         a.append(c**omega*δ)
         c+=1
-    return a
+    return a[:-1]

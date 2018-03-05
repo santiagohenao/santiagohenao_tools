@@ -30,7 +30,7 @@ def DiscreteTransform(freq,x,y):
     shapes_comparation(x,y)
     N=len(y)
     s=[(y[i])*np.exp(-2*np.pi*1j*freq*x[i]) for i in range(N)]
-    return np.mean(s)
+    return np.sum(s)
 
 
 def Analysis(x,y,estimate,error=1,resolution=500):
@@ -39,7 +39,7 @@ def Analysis(x,y,estimate,error=1,resolution=500):
     TODO: Return the maxima points.
     '''
     fs=np.linspace(estimate-error,estimate+error,resolution)
-    ss=abs(np.array([DiscreteFourierTransform(i,xs,ys) for i in fs]))
+    ss=abs(np.array([DiscreteTransform(i,xs,ys) for i in fs]))
 
     fig,ax=plt.subplots(2,figsize=(20,15))
     ax[0].scatter(x,y,s=10,c='k')
